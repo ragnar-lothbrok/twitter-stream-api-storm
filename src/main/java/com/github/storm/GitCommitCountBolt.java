@@ -25,7 +25,7 @@ public class GitCommitCountBolt extends BaseBasicBolt {
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer arg0) {
-
+		
 	}
 
 }

@@ -21,8 +21,9 @@ public class GitHubCommitTopology {
 		topologyBuilder.setSpout("commit-feed-listener", new GitCommitFeedSpout());
 
 		topologyBuilder.setBolt("email-extractor-bolt", new EmailExtractorBolt()).shuffleGrouping("commit-feed-listener");
-		topologyBuilder.setBolt("count-stream-bolt", new GitCommitCountBolt()).fieldsGrouping("email-extractor-bolt", new Fields("email"));
-//		topologyBuilder.setBolt("map-commit-stream", new GitCommitBolt()).fieldsGrouping("email-extractor-bolt", new Fields("email"));
+		
+		topologyBuilder.setBolt("commit-count-bolt", new GitCommitCountBolt()).fieldsGrouping("email-extractor-bolt","commit-count-stream", new Fields("email"));
+		topologyBuilder.setBolt("commit-detail-count-bolt", new GitCommitBolt()).fieldsGrouping("email-extractor-bolt","commit-detail-count-stream", new Fields("email"));
 
 		Config config = new Config();
 		config.setDebug(true);

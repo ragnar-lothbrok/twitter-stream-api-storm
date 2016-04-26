@@ -18,14 +18,14 @@ public class EmailExtractorBolt extends BaseBasicBolt {
 		GitCommit gitCommit = null;
 		for (Object obj : tupleList) {
 			gitCommit = (GitCommit) obj;
-			outputCollector.emit("count-stream-bolt", new Values(gitCommit.getEmailId()));
-//			outputCollector.emit("map-commit-stream", new Values(gitCommit));
+			outputCollector.emit("commit-count-stream", new Values(gitCommit.getEmailId()));
+			outputCollector.emit("commit-detail-count-stream", new Values(gitCommit));
 		}
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer outputCollector) {
-		outputCollector.declareStream("count-stream-bolt", new Fields("email"));
-//		outputCollector.declareStream("map-commit-stream", new Fields("email"));
+		outputCollector.declareStream("commit-count-stream", new Fields("email"));
+		outputCollector.declareStream("commit-detail-count-stream", new Fields("email"));
 	}
 
 }
