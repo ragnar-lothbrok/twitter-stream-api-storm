@@ -16,7 +16,7 @@ import backtype.storm.topology.base.BaseRichSpout;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
 
-public class CSVSpout extends BaseRichSpout {
+public class CSVShuffleGroupingSpout extends BaseRichSpout {
 
 	private static final long serialVersionUID = 1L;
 	private final static Logger logger = LoggerFactory.getLogger(BaseRichSpout.class);

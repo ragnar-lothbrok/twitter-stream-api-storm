@@ -10,16 +10,16 @@ import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
 
-public class CSVFirstBolt extends BaseBasicBolt {
+public class CSVFirstFieldGrupingBolt extends BaseBasicBolt {
 
 	private static final long serialVersionUID = 1L;
-	private final static Logger logger = LoggerFactory.getLogger(CSVFirstBolt.class);
+	private final static Logger logger = LoggerFactory.getLogger(CSVFirstFieldGrupingBolt.class);
 
 	public void execute(Tuple input, BasicOutputCollector collector) {
 		try {
 			if (input.getFields().size() > 0 && input.getFields().contains("supcrecord") && input.getValueByField("supcrecord") != null) {
 				POGSUPC pogsupc = (POGSUPC) input.getValueByField("supcrecord");
-				collector.emit("emit-pogid-stream",new Values(pogsupc.getPog()));
+				collector.emit("first-csv-bolt-stream",new Values(pogsupc.getPog()));
 			}
 		} catch (Exception exception) {
 			logger.error("pogsupc :>> " + exception.getMessage());
@@ -27,7 +27,7 @@ public class CSVFirstBolt extends BaseBasicBolt {
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-		declarer.declareStream("emit-pogid-stream", new Fields("pogid"));
+		declarer.declareStream("first-csv-bolt-stream", new Fields("pogid"));
 	}
 
 }

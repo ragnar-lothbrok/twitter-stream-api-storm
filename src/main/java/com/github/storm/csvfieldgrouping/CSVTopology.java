@@ -10,14 +10,17 @@ public class CSVTopology {
 
 	public static void main(String[] args) {
 
-		CSVSpout csvSpout = new CSVSpout();
-		CSVFirstBolt csvFirstBolt = new CSVFirstBolt();
-		CSVSecondBolt csvSecondBolt = new CSVSecondBolt();
+		CSVShuffleGroupingSpout csvSpout = new CSVShuffleGroupingSpout();
+		CSVFirstFieldGrupingBolt cSVFirstFieldGrupingBolt = new CSVFirstFieldGrupingBolt();
+		CSVSecondGlobalGroupingBolt cSVSecondGlobalGroupingBolt = new CSVSecondGlobalGroupingBolt();
+		CSVThirdGlobalGroupingBolt cSVThirdGlobalGroupingBolt = new CSVThirdGlobalGroupingBolt();
 
 		TopologyBuilder topologyBuilder = new TopologyBuilder();
 		topologyBuilder.setSpout("csv-spout", csvSpout);
-		topologyBuilder.setBolt("csv-first-bolt", csvFirstBolt,2).shuffleGrouping("csv-spout");
-		topologyBuilder.setBolt("csv-second-bolt", csvSecondBolt,4).fieldsGrouping("csv-first-bolt","emit-pogid-stream", new Fields("pogid"));
+		topologyBuilder.setBolt("csv-first-bolt", cSVFirstFieldGrupingBolt, 2).shuffleGrouping("csv-spout");
+		topologyBuilder.setBolt("csv-second-bolt", cSVSecondGlobalGroupingBolt, 4).fieldsGrouping("csv-first-bolt", "first-csv-bolt-stream",
+				new Fields("pogid"));
+		topologyBuilder.setBolt("csv-third-bolt", cSVThirdGlobalGroupingBolt, 4).globalGrouping("csv-second-bolt", "second-csv-bolt-stream");
 
 		Config config = new Config();
 		config.setDebug(true);
