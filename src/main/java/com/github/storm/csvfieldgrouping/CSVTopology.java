@@ -14,13 +14,15 @@ public class CSVTopology {
 		CSVFirstFieldGrupingBolt cSVFirstFieldGrupingBolt = new CSVFirstFieldGrupingBolt();
 		CSVSecondGlobalGroupingBolt cSVSecondGlobalGroupingBolt = new CSVSecondGlobalGroupingBolt();
 		CSVThirdGlobalGroupingBolt cSVThirdGlobalGroupingBolt = new CSVThirdGlobalGroupingBolt();
+		CSVForthDirectGroupingBolt csvForthDirectGroupingBolt = new CSVForthDirectGroupingBolt();
 
 		TopologyBuilder topologyBuilder = new TopologyBuilder();
 		topologyBuilder.setSpout("csv-spout", csvSpout);
 		topologyBuilder.setBolt("csv-first-bolt", cSVFirstFieldGrupingBolt, 2).shuffleGrouping("csv-spout");
-		topologyBuilder.setBolt("csv-second-bolt", cSVSecondGlobalGroupingBolt, 4).fieldsGrouping("csv-first-bolt", "first-csv-bolt-stream",
+		topologyBuilder.setBolt("csv-second-bolt", cSVSecondGlobalGroupingBolt, 3).fieldsGrouping("csv-first-bolt", "first-csv-bolt-stream",
 				new Fields("pogid"));
 		topologyBuilder.setBolt("csv-third-bolt", cSVThirdGlobalGroupingBolt, 4).globalGrouping("csv-second-bolt", "second-csv-bolt-stream");
+		topologyBuilder.setBolt("csv-forth-bolt", csvForthDirectGroupingBolt, 5).directGrouping("csv-third-bolt", "third-csv-bolt-stream");
 
 		Config config = new Config();
 		config.setDebug(true);
