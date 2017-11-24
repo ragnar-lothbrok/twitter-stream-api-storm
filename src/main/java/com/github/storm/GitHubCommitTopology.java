@@ -2,6 +2,9 @@ package com.github.storm;
 
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
+import backtype.storm.StormSubmitter;
+import backtype.storm.generated.AlreadyAliveException;
+import backtype.storm.generated.InvalidTopologyException;
 import backtype.storm.generated.StormTopology;
 import backtype.storm.topology.TopologyBuilder;
 import backtype.storm.tuple.Fields;
@@ -14,7 +17,7 @@ import backtype.storm.tuple.Fields;
  */
 public class GitHubCommitTopology {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws AlreadyAliveException, InvalidTopologyException {
 
 		TopologyBuilder topologyBuilder = new TopologyBuilder();
 
@@ -32,6 +35,7 @@ public class GitHubCommitTopology {
 
 		LocalCluster localCluster = new LocalCluster();
 		localCluster.submitTopology("github-commit-count-topology", config, stormTopology);
+//		StormSubmitter.submitTopology("github-commit-count-topology", config, stormTopology);
 
 	}
 }

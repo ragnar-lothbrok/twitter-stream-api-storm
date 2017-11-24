@@ -13,6 +13,8 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.Gson;
+
 import backtype.storm.spout.SpoutOutputCollector;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.OutputFieldsDeclarer;
@@ -45,15 +47,16 @@ public class GitCommitFeedSpout extends BaseRichSpout {
 
 		try {
 			FileRepositoryBuilder builder = new FileRepositoryBuilder();
-			Repository repo = builder.setGitDir(new File("/home/raghunandangupta/mygit/services-aggregator/.git")).setMustExist(true).build();
+			Repository repo = builder.setGitDir(new File("/Users/raghugupta/Documents/gitrepo/edureka-storm/.git"))
+					.setMustExist(true).build();
 			Git git = new Git(repo);
 			if (git != null) {
 				Iterable<RevCommit> log = git.log().call();
 				GitCommit gitCommit = null;
 				for (Iterator<RevCommit> iterator = log.iterator(); iterator.hasNext();) {
 					RevCommit commit = iterator.next();
-					gitCommit = new GitCommit(commit.getAuthorIdent().getEmailAddress(), commit.getId().toString(), commit.getAuthorIdent().getWhen(),
-							commit.getShortMessage());
+					gitCommit = new GitCommit(commit.getAuthorIdent().getEmailAddress(), commit.getId().getName(),
+							commit.getAuthorIdent().getWhen(), commit.getShortMessage());
 					commits.add(gitCommit);
 				}
 			}

@@ -1,5 +1,8 @@
 package com.twitter.storm;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import twitter4j.FilterQuery;
 import twitter4j.StallWarning;
 import twitter4j.Status;
@@ -49,13 +52,23 @@ public class TwitterStreamServer {
 
 				// gets Username
 				String username = status.getUser().getScreenName();
-				System.out.println(username);
-				String profileLocation = user.getLocation();
-				System.out.println(profileLocation);
+//				System.out.println(username);
+//				String profileLocation = user.getLocation();
+//				System.out.println(profileLocation);
 				long tweetId = status.getId();
-				System.out.println(tweetId);
+//				System.out.println(tweetId);
 				String content = status.getText();
-				System.out.println(content + "\n");
+				
+				Pattern p = Pattern.compile("\\\\u(\\p{XDigit}{4})");
+				Matcher m = p.matcher(content);
+				StringBuffer buf = new StringBuffer(content.length());
+				while (m.find()) {
+				  String ch = String.valueOf((char) Integer.parseInt(m.group(1), 16));
+				  m.appendReplacement(buf, Matcher.quoteReplacement(ch));
+				}
+				m.appendTail(buf);
+				
+				System.out.println(buf.toString() + "\n");
 
 			}
 
@@ -64,14 +77,14 @@ public class TwitterStreamServer {
 
 			}
 		};
-		FilterQuery fq = new FilterQuery();
-
-		String keywords[] = { "ireland" };
-
-		fq.track(keywords);
+//		FilterQuery fq = new FilterQuery();
+//
+//		String keywords[] = { "ireland" };
+//
+//		fq.track(keywords);
 
 		twitterStream.addListener(listener);
-		twitterStream.filter(fq);
+//		twitterStream.filter(fq);
 
 		final TwitterStreamConsumer streamConsumer = new TwitterStreamConsumer();
 		streamConsumer.start();

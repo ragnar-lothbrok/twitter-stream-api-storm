@@ -16,8 +16,8 @@ public class TwitterStreamConsumer extends Thread {
 
 	public static String accessTokens = "159371302-Kd442ysh0Kn74jRuMKB6H9ZOag5JqNotn4It4cfp";
 	public static String accessSecret = "hFZRfRaCG0pXAuTVLXLTClxVFgOUwhQJNLWCMTNKwyXpL";
-	public static String consumerKey = " yUqOWVjkI4HHMSy7g60ekoRPj";
-	public static String consumerSecret = "fy0Jh4x0crEuk0L7sW6eqv9oCVczTfTegk4n9DuSZVWXfazJU2";
+	public static String consumerKey = "RvOF6790fpuhOtt00vJC3h8MQ";
+	public static String consumerSecret = "KW7ys6A7hnKGIn3bz7BggxbeWCubxgGhDgKfso7Ogrv8Wx8DKE";
 
 	private static final String STREAM_URI = "https://stream.twitter.com/1.1/statuses/filter.json";
 	private String latestTweet;
@@ -49,7 +49,7 @@ public class TwitterStreamConsumer extends Thread {
 			/**
 			 * Keywords which we would like to track
 			 */
-			request.addBodyParameter("track", "boycott,fan");
+			request.addBodyParameter("track", "#AAPEducationSham");
 			service.signRequest(accessToken, request);
 			Response response = request.send();
 
